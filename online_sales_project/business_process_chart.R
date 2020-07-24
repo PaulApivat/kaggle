@@ -4,8 +4,11 @@ Platform: x86_64-apple-darwin15.6.0 (64-bit)
 Running under: macOS Catalina 10.15.5
 
 # library ----
+install.packages("RcppRoll")
+library(RcppRoll)
 library(tidyverse)
 library(lubridate)
+
 
 # load: retail_sales2 ----
 retail_sales2 <- read_csv("./csv/business.retailsales2.csv")
@@ -36,5 +39,19 @@ total_order_by_year %>%
     ggplot(aes(x = month_year, y = total_orders)) +
     geom_line()
 
-# add average ----
-total_order_by_year %>% view()
+# business process chart ----
+
+# add moving range
+total_order_by_year
+
+    
+    
+# add average column, moving_range
+# moving_range use roll_sum from RcppRoll
+
+
+total_order_by_year %>%
+    mutate(
+        avg_orders = mean(total_orders),
+        moving_range = roll_sum(total_orders, 2, align = "right", fill = NA)
+    )
