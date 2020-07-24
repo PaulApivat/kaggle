@@ -18,7 +18,7 @@ glimpse(retail_sales2)
 str(retail_sales2)
 View(retail_sales2)
 
-# data manipulation ----
+# data manipulation: general ----
 
 # create column month_year
 total_order_by_year <- retail_sales2 %>%
@@ -34,20 +34,18 @@ total_order_by_year <- retail_sales2 %>%
     select(month_year, total_orders) 
 
 
-# data visualization ----
+# data visualization: general ----
 
 total_order_by_year %>%
     ggplot(aes(x = month_year, y = total_orders)) +
     geom_line()
 
-# business process chart ----
+# data manipulation: business process chart ----
 
-
-    
 # add average column, moving_range
 # moving_range is lagging difference
 
-total_order_by_year %>%
+business_process_chart_data <- total_order_by_year %>%
     mutate(
         avg_orders = mean(total_orders),
         # calculate lagging difference
@@ -58,9 +56,12 @@ total_order_by_year %>%
         moving_range = ifelse(row_number()==1, 0, moving_range),
         avg_moving_range = mean(moving_range),
         lnpl = avg_orders - (2.66*avg_moving_range),
-        lower_25 = avg_orders - (1.33*avg_moving_range)
-    ) 
+        lower_25 = avg_orders - (1.33*avg_moving_range),
+        upper_25 = avg_orders + (1.33*avg_moving_range),
+        unpl = avg_orders + (2.66*avg_moving_range)
+    )
 
+business_process_chart_data
 
 
 
