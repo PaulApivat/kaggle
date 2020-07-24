@@ -59,8 +59,20 @@ business_process_chart_data <- total_order_by_year %>%
         unpl = avg_orders + (2.66*avg_moving_range)
     )
 
-business_process_chart_data %>% view()
+# data visualization: business process chart ----
 
+business_process_chart_data %>% 
+    ggplot(aes(month_year, total_orders)) +
+    geom_line() +
+    geom_hline(yintercept = business_process_chart_data$avg_orders, color = 'green') +
+    geom_hline(yintercept = business_process_chart_data$unpl, color = 'red', linetype = 'dashed') +
+    geom_hline(yintercept = business_process_chart_data$lnpl, color = 'red', linetype = 'dashed') +
+    geom_hline(yintercept = business_process_chart_data$upper_25, color = 'orange') +
+    geom_hline(yintercept = business_process_chart_data$lower_25, color = 'orange')
+
+# next steps: 
+# - break x-axis into quarters
+# - provide plot title, subtitle, caption, both axis labels
 
 
 
