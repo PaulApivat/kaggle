@@ -4,10 +4,11 @@ Platform: x86_64-apple-darwin15.6.0 (64-bit)
 Running under: macOS Catalina 10.15.5
 
 # library ----
-install.packages("RcppRoll")
-library(RcppRoll)
+install.packages("RcppRoll") # might not need roll_sum
+library(RcppRoll)           # might not need roll_sum
 library(tidyverse)
 library(lubridate)
+library(zoo)
 
 
 # load: retail_sales2 ----
@@ -41,17 +42,26 @@ total_order_by_year %>%
 
 # business process chart ----
 
-# add moving range
-total_order_by_year
 
-    
     
 # add average column, moving_range
-# moving_range use roll_sum from RcppRoll
-
+# moving_range is lagging difference
 
 total_order_by_year %>%
     mutate(
         avg_orders = mean(total_orders),
-        moving_range = roll_sum(total_orders, 2, align = "right", fill = NA)
-    )
+        # calculate lagging difference
+        moving_range = diff(as.zoo(total_orders), na.pad=TRUE),
+        # get absolute value
+        moving_range = abs(moving_range),
+        # change NA to 0
+        moving_range = ifelse(row_number()==1, 0, moving_range),
+        avg_moving_range = mean(moving_range),
+        lnpl = avg_orders - (2.66*avg_moving_range),
+        lower_25 = avg_orders - (1.33*avg_moving_range)
+    ) 
+
+
+
+
+
