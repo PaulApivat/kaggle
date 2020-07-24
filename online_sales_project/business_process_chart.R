@@ -4,11 +4,9 @@ Platform: x86_64-apple-darwin15.6.0 (64-bit)
 Running under: macOS Catalina 10.15.5
 
 # library ----
-install.packages("RcppRoll") # might not need roll_sum
-library(RcppRoll)           # might not need roll_sum
 library(tidyverse)
 library(lubridate)
-library(zoo)
+library(zoo)        # lagging difference (moving range)
 
 
 # load: retail_sales2 ----
@@ -61,7 +59,7 @@ business_process_chart_data <- total_order_by_year %>%
         unpl = avg_orders + (2.66*avg_moving_range)
     )
 
-business_process_chart_data
+business_process_chart_data %>% view()
 
 
 
