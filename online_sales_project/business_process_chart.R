@@ -68,11 +68,21 @@ business_process_chart_data %>%
     geom_hline(yintercept = business_process_chart_data$unpl, color = 'red', linetype = 'dashed') +
     geom_hline(yintercept = business_process_chart_data$lnpl, color = 'red', linetype = 'dashed') +
     geom_hline(yintercept = business_process_chart_data$upper_25, color = 'orange') +
-    geom_hline(yintercept = business_process_chart_data$lower_25, color = 'orange')
+    geom_hline(yintercept = business_process_chart_data$lower_25, color = 'orange') +
+    # break x-axis into quarters
+    scale_x_date(breaks = '3 month') +
+    # note: place before theme()
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(
+        title = "Total Orders: Business Process Chart",
+        subtitle = "2017 - 2019",
+        x = "",
+        y = "Total Orders",
+        caption = "4th Quarter of 2018 indicates first time surpassing Upper 25% in Total Sales"
+        ) 
 
-# next steps: 
-# - break x-axis into quarters
-# - provide plot title, subtitle, caption, both axis labels
+
 
 
 
