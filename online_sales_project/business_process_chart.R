@@ -61,7 +61,7 @@ business_process_chart_data <- total_order_by_year %>%
 
 # data visualization: business process chart ----
 
-business_process_chart_data %>% 
+business_process_chart_total_orders_viz <- business_process_chart_data %>% 
     ggplot(aes(month_year, total_orders)) +
     geom_line() +
     geom_hline(yintercept = business_process_chart_data$avg_orders, color = 'green') +
@@ -82,7 +82,12 @@ business_process_chart_data %>%
         caption = "4th Quarter of 2018 indicates first time surpassing Upper 25% in Total Sales"
         ) 
 
-
-
+# add annotation
+# note: x-axis Date data type
+business_process_chart_total_orders_viz +
+    annotate("text", x = as.Date("2017-02-01"), y = 170, color = 'red', label = "UNLP") +
+    annotate("text", x = as.Date("2017-02-01"), y = 25, color = 'red', label = "LNLP") +
+    annotate("text", x = as.Date("2017-02-01"), y = 137, color = 'orange', label = "Upper 25%") +
+    annotate("text", x = as.Date("2017-02-01"), y = 105, color = 'green', label = "Avg = 97")
 
 
