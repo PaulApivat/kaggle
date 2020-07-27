@@ -242,22 +242,20 @@ create_bpc_columns_gross_sales <- function(data){
 
 create_bpc_columns_gross_sales(gross_sales_year_month_data2)
 
+# Fourth
 gross_sales_bpc_data <- create_bpc_columns_gross_sales(gross_sales_year_month_data2)
 
 # Fifth
-
-# ERROR NOT DONE:
-create_bpc_visualization_gross_sales(gross_sales_bpc_data)
 
 create_bpc_visualization_gross_sales <- function(data){
     data %>%
         ggplot(aes(month_year, gross_sales)) +
         geom_line() +
-        geom_hline(yintercept = business_process_chart_data$avg_orders, color = 'green') +
-        geom_hline(yintercept = business_process_chart_data$unpl, color = 'red', linetype = 'dashed') +
-        geom_hline(yintercept = business_process_chart_data$lnpl, color = 'red', linetype = 'dashed') +
-        geom_hline(yintercept = business_process_chart_data$upper_25, color = 'orange') +
-        geom_hline(yintercept = business_process_chart_data$lower_25, color = 'orange') +
+        geom_hline(yintercept = gross_sales_bpc_data$avg_orders, color = 'green') +
+        geom_hline(yintercept = gross_sales_bpc_data$unpl, color = 'red', linetype = 'dashed') +
+        geom_hline(yintercept = gross_sales_bpc_data$lnpl, color = 'red', linetype = 'dashed') +
+        geom_hline(yintercept = gross_sales_bpc_data$upper_25, color = 'orange') +
+        geom_hline(yintercept = gross_sales_bpc_data$lower_25, color = 'orange') +
         # break x-axis into quarters
         scale_x_date(breaks = '3 month') +
         # note: place before theme()
@@ -270,8 +268,10 @@ create_bpc_visualization_gross_sales <- function(data){
             y = "Gross Sales",
             caption = "----"
         ) +
-        annotate("text", x = as.Date("2017-02-01"), y = 170, color = 'red', label = "UNLP") +
-        annotate("text", x = as.Date("2017-02-01"), y = 25, color = 'red', label = "LNLP") +
-        annotate("text", x = as.Date("2017-02-01"), y = 137, color = 'orange', label = "Upper 25%") +
-        annotate("text", x = as.Date("2017-02-01"), y = 105, color = 'green', label = "Avg = 97")
+        annotate("text", x = as.Date("2017-02-01"), y = gross_sales_bpc_data$unpl, color = 'red', label = "UNLP") +
+        annotate("text", x = as.Date("2017-02-01"), y = gross_sales_bpc_data$lnpl, color = 'red', label = "LNLP") +
+        annotate("text", x = as.Date("2017-02-01"), y = gross_sales_bpc_data$upper_25, color = 'orange', label = "Upper 25%") +
+        annotate("text", x = as.Date("2017-02-01"), y = gross_sales_bpc_data$avg_orders, color = 'green', label = "Avg = 97")
 }
+
+create_bpc_visualization_gross_sales(gross_sales_bpc_data)
