@@ -195,5 +195,83 @@ bpc_data <- create_bpc_columns(data)
 # FIFTH
 create_bpc_visualization(bpc_data)
 
+## GROSS SALES ----
+retail_sales2
 
 
+gross_sales_year_month_data <- retail_sales2 %>%
+    select(`Gross Sales`, Year, Month) %>%
+    rename(gross_sales = `Gross Sales`)
+
+# First
+gross_sales_year_month_data2 <- create_ymd_function(gross_sales_year_month_data)
+
+# Second
+
+# note: function specific to gross_sales
+create_line_chart_gross_sales <- function(data){
+    data %>%
+        ggplot(aes(x = month_year, y = gross_sales)) +
+        geom_line()
+}
+
+create_line_chart_gross_sales(gross_sales_year_month_data2)
+
+# Third
+
+# note: function specific to gross_sales
+create_bpc_columns_gross_sales <- function(data){
+    bpc_data <- data %>%
+        mutate(
+            avg_orders = mean(gross_sales),
+            # calculate lagging difference
+            moving_range = diff(as.zoo(gross_sales), na.pad=TRUE),
+            # get absolute value
+            moving_range = abs(moving_range),
+            # change NA to 0
+            moving_range = ifelse(row_number()==1, 0, moving_range),
+            avg_moving_range = mean(moving_range),
+            lnpl = avg_orders - (2.66*avg_moving_range),
+            lower_25 = avg_orders - (1.33*avg_moving_range),
+            upper_25 = avg_orders + (1.33*avg_moving_range),
+            unpl = avg_orders + (2.66*avg_moving_range)
+        )
+    
+    return(bpc_data)
+}
+
+create_bpc_columns_gross_sales(gross_sales_year_month_data2)
+
+gross_sales_bpc_data <- create_bpc_columns_gross_sales(gross_sales_year_month_data2)
+
+# Fifth
+
+# ERROR NOT DONE:
+create_bpc_visualization_gross_sales(gross_sales_bpc_data)
+
+create_bpc_visualization_gross_sales <- function(data){
+    data %>%
+        ggplot(aes(month_year, gross_sales)) +
+        geom_line() +
+        geom_hline(yintercept = business_process_chart_data$avg_orders, color = 'green') +
+        geom_hline(yintercept = business_process_chart_data$unpl, color = 'red', linetype = 'dashed') +
+        geom_hline(yintercept = business_process_chart_data$lnpl, color = 'red', linetype = 'dashed') +
+        geom_hline(yintercept = business_process_chart_data$upper_25, color = 'orange') +
+        geom_hline(yintercept = business_process_chart_data$lower_25, color = 'orange') +
+        # break x-axis into quarters
+        scale_x_date(breaks = '3 month') +
+        # note: place before theme()
+        theme_minimal() +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        labs(
+            title = "Gross Sales: Business Process Chart",
+            subtitle = "2017 - 2019",
+            x = "",
+            y = "Gross Sales",
+            caption = "----"
+        ) +
+        annotate("text", x = as.Date("2017-02-01"), y = 170, color = 'red', label = "UNLP") +
+        annotate("text", x = as.Date("2017-02-01"), y = 25, color = 'red', label = "LNLP") +
+        annotate("text", x = as.Date("2017-02-01"), y = 137, color = 'orange', label = "Upper 25%") +
+        annotate("text", x = as.Date("2017-02-01"), y = 105, color = 'green', label = "Avg = 97")
+}
