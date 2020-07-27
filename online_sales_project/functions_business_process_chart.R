@@ -170,4 +170,30 @@ create_bpc_visualization <- function(data){
         annotate("text", x = as.Date("2017-02-01"), y = 105, color = 'green', label = "Avg = 97")
 }
 
+
+
+# Four Functions ----
+
+# Starting Point:
+data
+# In this order:
+
+# FIRST
+# NOTE: data must have Year and Month columns
+create_ymd_function(data)
+
+# SECOND
+# NOTE: data must have Year and Month columns
+create_line_chart(data)
+
+# THIRD
+create_bpc_columns(data)
+
+# FOURTH
+bpc_data <- create_bpc_columns(data)
+
+# FIFTH
 create_bpc_visualization(bpc_data)
+
+
+
