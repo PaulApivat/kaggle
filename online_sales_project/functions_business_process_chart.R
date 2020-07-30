@@ -389,24 +389,38 @@ create_bpc_visualization_general(net_sales_bpc_data, month_year, net_sales, avg_
 
 names(net_sales_bpc_data[,1])
 
-###
+# TOTAL SALES ----
 
- +
-    # note: place before theme()
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    labs(
-        title = glue('{dataset}: Business Process Chart'),
-        subtitle = "2017 - 2019",
-        x = "",
-        y = glue('{dataset}'),
-        caption = "----"
-    ) +
-    annotate("text", x = as.Date("2017-02-01"), y = col_unpl, color = 'red', label = "UNLP") +
-    annotate("text", x = as.Date("2017-02-01"), y = col_lnpl, color = 'red', label = "LNLP") +
-    annotate("text", x = as.Date("2017-02-01"), y = col_upper_25, color = 'orange', label = "Upper 25%") +
-    annotate("text", x = as.Date("2017-02-01"), y = col_avg, color = 'green', label = "Avg = 97")
+# Objective: see if you can use existing General functions created.
+
+total_sales_year_month <- retail_sales2 %>%
+    select(`Total Sales`, Year, Month) %>%
+    rename(total_sales = `Total Sales`)
+
+total_sales_year_month
+
+# Step 1a: run create_ymd_function on total_sales_year_month ----
+total_sales_year_month_2 <- create_ymd_function(total_sales_year_month)
 
 
+# Step 2: Generalized function for creating line chart ----
 
+# NOTE: create_line_chart_general takes data and two columns
 
+create_line_chart_general(total_sales_year_month_2, month_year, total_sales)
+
+# Step 3: Generalized function for creating BPC columns ----
+
+# NOTE: 
+
+create_bpc_columns_general(total_sales_year_month_2, total_sales)
+
+# Step 3a: Assign to total_sales_bpc_data ----
+
+total_sales_bpc_data <- create_bpc_columns_general(total_sales_year_month_2, total_sales)
+
+total_sales_bpc_data
+
+# Step 4: NOT General function for BPC Visualiation ----
+
+create_bpc_visualization_general(total_sales_bpc_data, month_year, total_sales, avg_orders, unpl, lnpl, upper_25, lower_25)
