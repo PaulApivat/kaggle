@@ -348,7 +348,6 @@ create_bpc_visualization_general <- function(dataset, col_x, col_y){
     col_x <- enquo(col_x) # month_year
     col_y <- enquo(col_y) # net_sales
     
-    
     dataset %>%
         ggplot(aes(x = !!(col_x), y = !!(col_y))) +
         geom_line() 
