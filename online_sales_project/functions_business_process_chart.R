@@ -295,7 +295,9 @@ net_sales_year_month
 net_sales_year_month_2 <- create_ymd_function(net_sales_year_month)
 
 
-# Step 2: 
+# Step 2: Generalized function for creating line chart ----
+
+# NOTE: create_line_chart_general takes data and two columns
 
 create_line_chart_general <- function(dataset, col_name_1, col_name_2){
     col_name_1 <- enquo(col_name_1)
@@ -307,5 +309,34 @@ create_line_chart_general <- function(dataset, col_name_1, col_name_2){
 
 create_line_chart_general(net_sales_year_month_2, month_year, net_sales)
 
-# Step 3:
+# Step 3: Generalized function for creating BPC columns
+
+# NOTE: 
+
+create_bpc_columns_general <- function(dataset, col_name){
+    col_name <- enquo(col_name)
+    bpc_data <- dataset %>%
+        mutate(
+            avg_orders = mean(!!(col_name)),
+            # calculate lagging difference
+            moving_range = diff(as.zoo(!!(col_name)), na.pad=TRUE),
+            # get absolute value
+            moving_range = abs(moving_range),
+            # change NA to 0
+            moving_range = ifelse(row_number()==1, 0, moving_range),
+            avg_moving_range = mean(moving_range),
+            lnpl = avg_orders - (2.66*avg_moving_range),
+            lower_25 = avg_orders - (1.33*avg_moving_range),
+            upper_25 = avg_orders + (1.33*avg_moving_range),
+            unpl = avg_orders + (2.66*avg_moving_range)
+        )
+    
+    return(bpc_data)
+}
+
+net_sales_year_month_2
+
+create_bpc_columns_general(net_sales_year_month_2, net_sales)
+
+
 
