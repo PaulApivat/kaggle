@@ -7,6 +7,7 @@ Running under: macOS Catalina 10.15.5
 library(tidyverse)
 library(lubridate)
 library(zoo)        # lagging difference (moving range)
+library(glue)       # string interpolation 
 
 
 # load: retail_sales2 ----
@@ -343,7 +344,7 @@ create_bpc_columns_general(net_sales_year_month_2, net_sales)
 net_sales_bpc_data <- create_bpc_columns_general(net_sales_year_month_2, net_sales)
 
 # Step 4: NOT General function for BPC Visualiation ----
-
+library(glue)
 # NOTE: NOT a general function
 
 create_bpc_visualization_general <- function(dataset, col_x, col_y, col_avg, col_unpl, col_lnpl, col_upper_25, col_lower_25){
@@ -363,11 +364,48 @@ create_bpc_visualization_general <- function(dataset, col_x, col_y, col_avg, col
         geom_hline(yintercept = col_unpl, color = 'red', linetype = 'dashed') +
         geom_hline(yintercept = col_lnpl, color = 'red', linetype = 'dashed') +
         geom_hline(yintercept = col_upper_25, color = 'orange') +
-        geom_hline(yintercept = col_lower_25, color = 'orange') 
+        geom_hline(yintercept = col_lower_25, color = 'orange') +
+        
+        # break x-axis into quarters
+        scale_x_date(breaks = '3 month') +
+        # note: place before theme()
+        theme_minimal() +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        labs(
+            title = glue('{names(dataset[,1])}: Business Process Chart'),
+            subtitle = "2017 - 2019",
+            x = "",
+            y = glue('{names(dataset[,1])}'),
+            caption = "----"
+        ) +
+        annotate("text", x = as.Date("2017-02-01"), y = col_unpl, color = 'red', label = "UNLP") +
+        annotate("text", x = as.Date("2017-02-01"), y = col_lnpl, color = 'red', label = "LNLP") +
+        annotate("text", x = as.Date("2017-02-01"), y = col_upper_25, color = 'orange', label = "Upper 25%") +
+        annotate("text", x = as.Date("2017-02-01"), y = col_avg, color = 'green', label = "Avg = 97")
+    
 }
 
 create_bpc_visualization_general(net_sales_bpc_data, month_year, net_sales, avg_orders, unpl, lnpl, upper_25, lower_25)
 
+names(net_sales_bpc_data[,1])
+
+###
+
+ +
+    # note: place before theme()
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(
+        title = glue('{dataset}: Business Process Chart'),
+        subtitle = "2017 - 2019",
+        x = "",
+        y = glue('{dataset}'),
+        caption = "----"
+    ) +
+    annotate("text", x = as.Date("2017-02-01"), y = col_unpl, color = 'red', label = "UNLP") +
+    annotate("text", x = as.Date("2017-02-01"), y = col_lnpl, color = 'red', label = "LNLP") +
+    annotate("text", x = as.Date("2017-02-01"), y = col_upper_25, color = 'orange', label = "Upper 25%") +
+    annotate("text", x = as.Date("2017-02-01"), y = col_avg, color = 'green', label = "Avg = 97")
 
 
 
