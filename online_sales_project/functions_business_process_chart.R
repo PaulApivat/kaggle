@@ -170,7 +170,9 @@ create_bpc_visualization <- function(data){
         annotate("text", x = as.Date("2017-02-01"), y = 105, color = 'green', label = "Avg = 97")
 }
 
+bpc_data
 
+create_bpc_visualization(bpc_data)
 
 # Four Functions ----
 
@@ -208,7 +210,7 @@ gross_sales_year_month_data2 <- create_ymd_function(gross_sales_year_month_data)
 
 # Second
 
-# note: function specific to gross_sales
+# note: function specific to 'gross_sales'
 create_line_chart_gross_sales <- function(data){
     data %>%
         ggplot(aes(x = month_year, y = gross_sales)) +
@@ -275,3 +277,35 @@ create_bpc_visualization_gross_sales <- function(data){
 }
 
 create_bpc_visualization_gross_sales(gross_sales_bpc_data)
+
+### NET SALES ----
+# Objective: Write function for Net Sales that can generalize beyond Net Sales
+
+retail_sales2
+
+# Step 1: subset dataframe for Net Sales column ----
+
+net_sales_year_month <- retail_sales2 %>%
+    select(`Net Sales`, Year, Month) %>%
+    rename(net_sales = `Net Sales`)
+
+net_sales_year_month
+
+# Step 1a: run create_ymd_function on net_sales_year_month ----
+net_sales_year_month_2 <- create_ymd_function(net_sales_year_month)
+
+
+# Step 2: 
+
+create_line_chart_general <- function(dataset, col_name_1, col_name_2){
+    col_name_1 <- enquo(col_name_1)
+    col_name_2 <- enquo(col_name_2)
+    dataset %>%
+        ggplot(aes(x = !!(col_name_1), y = !!(col_name_2))) +
+        geom_line()   
+}
+
+create_line_chart_general(net_sales_year_month_2, month_year, net_sales)
+
+# Step 3:
+
