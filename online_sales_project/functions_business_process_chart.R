@@ -342,8 +342,22 @@ create_bpc_columns_general(net_sales_year_month_2, net_sales)
 
 net_sales_bpc_data <- create_bpc_columns_general(net_sales_year_month_2, net_sales)
 
-# Step 4:
+# Step 4: General function for BPC Visualiation ----
 
+create_bpc_visualization_general <- function(dataset, col_x, col_y){
+    col_x <- enquo(col_x) # month_year
+    col_y <- enquo(col_y) # net_sales
+    
+    
+    dataset %>%
+        ggplot(aes(x = !!(col_x), y = !!(col_y))) +
+        geom_line() 
+}
+
+create_bpc_visualization_general(net_sales_bpc_data, month_year, net_sales)
+
+
+# NOT WORKING ----
 create_bpc_visualization_general <- function(dataset, col_x, col_y, col_avg, col_unpl, col_lnpl, col_upper25, col_lower25){
     col_x <- enquo(col_x) # month_year
     col_y <- enquo(col_y) # net_sales
@@ -354,13 +368,13 @@ create_bpc_visualization_general <- function(dataset, col_x, col_y, col_avg, col
     col_lower25 <- enquo(col_lower25)
     
     dataset %>%
-        ggplot(aes(!!col_x, !!col_y)) +
+        ggplot(aes(x = !!(col_x), y = !!(col_y))) +
         geom_line() +
-        geom_hline(yintercept = !!col_avg, color = 'green') +
-        geom_hline(yintercept = !!col_unpl, color = 'red', linetype = 'dashed') +
-        geom_hline(yintercept = !!col_lnpl, color = 'red', linetype = 'dashed') +
-        geom_hline(yintercept = !!col_upper25, color = 'orange') +
-        geom_hline(yintercept = !!col_lower25, color = 'orange') +
+        geom_hline(yintercept = !! as_label(col_avg), color = 'green') +
+        geom_hline(yintercept = !! as_label(col_unpl), color = 'red', linetype = 'dashed') +
+        geom_hline(yintercept = !! as_label(col_lnpl), color = 'red', linetype = 'dashed') +
+        geom_hline(yintercept = !! as_label(col_upper25), color = 'orange') +
+        geom_hline(yintercept = !! as_label(col_lower25), color = 'orange') +
         # break x-axis into quarters
         scale_x_date(breaks = '3 month') +
         # note: place before theme()
@@ -373,11 +387,46 @@ create_bpc_visualization_general <- function(dataset, col_x, col_y, col_avg, col
             y = "Insert Column",
             caption = "----"
         ) +
-        annotate("text", x = as.Date("2017-02-01"), y = !!col_unpl, color = 'red', label = "UNLP") +
-        annotate("text", x = as.Date("2017-02-01"), y = !!col_lnpl, color = 'red', label = "LNLP") +
-        annotate("text", x = as.Date("2017-02-01"), y = !!col_upper25, color = 'orange', label = "Upper 25%") +
-        annotate("text", x = as.Date("2017-02-01"), y = !!col_lower25, color = 'green', label = "Avg = 97")
+        annotate("text", x = as.Date("2017-02-01"), y = !! as_label(col_unpl), color = 'red', label = "UNLP") +
+        annotate("text", x = as.Date("2017-02-01"), y = !! as_label(col_lnpl), color = 'red', label = "LNLP") +
+        annotate("text", x = as.Date("2017-02-01"), y = !! as_label(col_upper25), color = 'orange', label = "Upper 25%") +
+        annotate("text", x = as.Date("2017-02-01"), y = !! as_label(col_lower25), color = 'green', label = "Avg = 97")
 }
 
 create_bpc_visualization_general(net_sales_bpc_data, month_year, net_sales, avg_orders, unpl, lnpl, upper_25, lower_25)
+
+
+# NOT WORKING TOO
+create_bpc_visualization_general_2 <- function(dataset, col_x, col_y, ...){
+    col_x <- enquo(col_x)
+    col_y <- enquo(col_y)
+    col_vars <- quos(...)
+    
+    dataset %>%
+        ggplot(aes(x = !!col_x, y = !!col_y)) +
+        geom_line() +
+        geom_hline(yintercept = !!!col_vars, color = 'green') +
+        geom_hline(yintercept = !!!col_vars, color = 'red', linetype = 'dashed') +
+        geom_hline(yintercept = !!!col_vars, color = 'red', linetype = 'dashed') +
+        geom_hline(yintercept = !!!col_vars, color = 'orange') +
+        geom_hline(yintercept = !!!col_vars, color = 'orange') +
+        # break x-axis into quarters
+        scale_x_date(breaks = '3 month') +
+        # note: place before theme()
+        theme_minimal() +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        labs(
+            title = "[Insert Column: ]Business Process Chart",
+            subtitle = "2017 - 2019",
+            x = "",
+            y = "Insert Column",
+            caption = "----"
+        ) +
+        annotate("text", x = as.Date("2017-02-01"), y = !!!col_vars, color = 'red', label = "UNLP") +
+        annotate("text", x = as.Date("2017-02-01"), y = !!!col_vars, color = 'red', label = "LNLP") +
+        annotate("text", x = as.Date("2017-02-01"), y = !!!col_vars, color = 'orange', label = "Upper 25%") +
+        annotate("text", x = as.Date("2017-02-01"), y = !!!col_vars, color = 'green', label = "Avg = 97")
+}
+
+create_bpc_visualization_general_2(net_sales_bpc_data, month_year, net_sales, avg_orders, unpl, lnpl, upper_25, lower_25)
 
