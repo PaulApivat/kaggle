@@ -1,0 +1,170 @@
+---
+title: "Introducing Functions to the Workflow"
+author: "Paul Apivat Hanvongse"
+date: "7/30/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+# library ----
+library(tidyverse)
+library(lubridate)
+library(zoo)        # lagging difference (moving range)
+library(glue)       # string interpolation 
+
+retail_sales2 <- read_csv("./csv/business.retailsales2.csv")
+glimpse(retail_sales2)
+
+
+```
+
+## Slipping Functions into the Workflow
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+
+# Selecting columns to work with (net_sales)
+net_sales_year_month <- retail_sales2 %>%
+    select(`Net Sales`, Year, Month) %>%
+    rename(net_sales = `Net Sales`)
+
+# Function takes in dataframe to add columns for further analysis
+create_ymd_function <- function(data) {
+    data %>%
+        mutate(
+            Day = 1,
+            month_year = paste(Year, Month, Day),
+            month_year = month_year %>% ymd(),
+            month = month(month_year)
+        )
+}
+
+create_ymd_function(net_sales_year_month)
+
+net_sales_year_month_2 <- create_ymd_function(net_sales_year_month)
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Generalizing Functions
+
+```{r}
+
+# Step 1: 
+
+# This function only works for net_sales
+# It's easy to just slip 'data' as an argument
+# But the aesthetic mapping is done only one a specific column
+create_line_chart <- function(data){
+    data %>%
+    ggplot(aes(x = month_year, y = net_sales)) +
+    geom_line()   
+}
+
+# Step 2: This is a more generalizable function using enquo() and '!!'
+# note columns as function parameters
+
+create_line_chart_general <- function(dataset, col_name_1, col_name_2){
+    col_name_1 <- enquo(col_name_1)
+    col_name_2 <- enquo(col_name_2)
+    dataset %>%
+        ggplot(aes(x = !!(col_name_1), y = !!(col_name_2))) +
+        geom_line()   
+}
+
+# Call the function with data and necessary parameters
+create_line_chart_general(net_sales_year_month_2, month_year, net_sales)
+
+
+```
+
+## More Generalized Function
+
+```{r}
+
+create_bpc_columns_general <- function(dataset, col_name){
+    col_name <- enquo(col_name)
+    bpc_data <- dataset %>%
+        mutate(
+            avg_orders = mean(!!(col_name)),
+            # calculate lagging difference
+            moving_range = diff(as.zoo(!!(col_name)), na.pad=TRUE),
+            # get absolute value
+            moving_range = abs(moving_range),
+            # change NA to 0
+            moving_range = ifelse(row_number()==1, 0, moving_range),
+            avg_moving_range = mean(moving_range),
+            lnpl = avg_orders - (2.66*avg_moving_range),
+            lower_25 = avg_orders - (1.33*avg_moving_range),
+            upper_25 = avg_orders + (1.33*avg_moving_range),
+            unpl = avg_orders + (2.66*avg_moving_range)
+        )
+    
+    return(bpc_data)
+}
+
+create_bpc_columns_general(net_sales_year_month_2, net_sales)
+
+net_sales_bpc_data <- create_bpc_columns_general(net_sales_year_month_2, net_sales)
+```
+
+## Generalized Functions for Visualization
+
+```{r}
+
+create_bpc_visualization_general <- function(dataset, col_x, col_y, col_avg, col_unpl, col_lnpl, col_upper_25, col_lower_25){
+    col_x <- enquo(col_x) # month_year
+    col_y <- enquo(col_y) # net_sales
+    
+    col_avg <- dataset$avg_orders
+    col_unpl <- dataset$unpl
+    col_lnpl <- dataset$lnpl
+    col_upper_25 <- dataset$upper_25
+    col_lower_25 <- dataset$lower_25
+    
+    dataset %>%
+        ggplot(aes(x = !!(col_x), y = !!(col_y))) +
+        geom_line() +
+        geom_hline(yintercept = col_avg, color = 'green') +
+        geom_hline(yintercept = col_unpl, color = 'red', linetype = 'dashed') +
+        geom_hline(yintercept = col_lnpl, color = 'red', linetype = 'dashed') +
+        geom_hline(yintercept = col_upper_25, color = 'orange') +
+        geom_hline(yintercept = col_lower_25, color = 'orange') +
+        
+        # break x-axis into quarters
+        scale_x_date(breaks = '3 month') +
+        # note: place before theme()
+        theme_minimal() +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        labs(
+            title = glue('{names(dataset[,1])}: Business Process Chart'),
+            subtitle = "2017 - 2019",
+            x = "",
+            y = glue('{names(dataset[,1])}'),
+            caption = "----"
+        ) +
+        annotate("text", x = as.Date("2017-02-01"), y = col_unpl, color = 'red', label = "UNLP") +
+        annotate("text", x = as.Date("2017-02-01"), y = col_lnpl, color = 'red', label = "LNLP") +
+        annotate("text", x = as.Date("2017-02-01"), y = col_upper_25, color = 'orange', label = "Upper 25%") +
+        annotate("text", x = as.Date("2017-02-01"), y = col_avg, color = 'green', label = "Avg = 97")
+    
+}
+
+create_bpc_visualization_general(net_sales_bpc_data, month_year, net_sales, avg_orders, unpl, lnpl, upper_25, lower_25)
+
+
+```
+
+
