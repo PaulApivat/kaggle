@@ -342,7 +342,9 @@ create_bpc_columns_general(net_sales_year_month_2, net_sales)
 
 net_sales_bpc_data <- create_bpc_columns_general(net_sales_year_month_2, net_sales)
 
-# Step 4: General function for BPC Visualiation ----
+# Step 4: NOT General function for BPC Visualiation ----
+
+# NOTE: NOT a general function
 
 create_bpc_visualization_general <- function(dataset, col_x, col_y){
     col_x <- enquo(col_x) # month_year
@@ -350,10 +352,13 @@ create_bpc_visualization_general <- function(dataset, col_x, col_y){
     
     dataset %>%
         ggplot(aes(x = !!(col_x), y = !!(col_y))) +
-        geom_line() 
+        geom_line() +
+        geom_hline(yintercept = net_sales_bpc_data$avg_orders, color = 'green')
 }
 
 create_bpc_visualization_general(net_sales_bpc_data, month_year, net_sales)
+
+
 
 
 # NOT WORKING ----
