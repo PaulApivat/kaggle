@@ -9,13 +9,16 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Context
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+In web development, functions are everywhere and are written to get even the smallest tasks done like allowing users to click on a button or controlling where and how a pop-up modal appears. In data analysis, you can go without using functions as long as you're working on small scale projects and do not need to share your code with others. 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Moreover, they can make your life a lot easier if you want to avoid copying and pasting your code in a bunch of different places (it also makes your code less error prone and easier to update). 
 
-```{r cars}
+Functions may require a **slight** perspective shift for those who aren't familiar. In this post, I want to share how I **snuck** functions into my workflow for a specific project. 
+
+
+```{r cars, include=FALSE}
 # library ----
 library(tidyverse)
 library(lubridate)
@@ -28,16 +31,37 @@ glimpse(retail_sales2)
 
 ```
 
-## Slipping Functions into the Workflow
+## Slipping Custom Functions into the Workflow
 
-You can also embed plots, for example:
+The most intuitive way, in my opinion, to introduce functions is to take a certain data pre-processing sequence and **turn it into a function**. Below, I have a newly created dataframe called `net_sales_year_month` that is a dataframe with three columns (net_sales, Year, Month). 
 
-```{r pressure, echo=FALSE}
+Suppose my objective is to add a `Day` and `month_year` column, that combines Year, Month and Day (yyyy-mm-dd) into a `date` type. The pre-processing task would be to take `net_sales_year_month` and use the mutate function to create some new columns.  
+
+This is fine and well if you're doing this **one time**, but what if you need to repeat this operation on multiple columns?
+
+That's where a **custom function** comes in. 
+
+For example, the function below called `create_ymd_function` simply **replaces** `net_sales_year_month` with a generic `data`, serving as the function parameter. Now *any* dataframe can be used as a parameter for the `create_ymd_function`. 
+
+Note the BEFORE and AFTER sections below - they have the same output, but one is a more general function that can be used with other data frames. 
+
+```{r pressure, echo=TRUE, include=TRUE}
 
 # Selecting columns to work with (net_sales)
 net_sales_year_month <- retail_sales2 %>%
     select(`Net Sales`, Year, Month) %>%
     rename(net_sales = `Net Sales`)
+
+# BEFORE
+net_sales_year_month %>%
+        mutate(
+            Day = 1,
+            month_year = paste(Year, Month, Day),
+            month_year = month_year %>% ymd(),
+            month = month(month_year)
+        )
+
+# AFTER
 
 # Function takes in dataframe to add columns for further analysis
 create_ymd_function <- function(data) {
@@ -56,13 +80,22 @@ net_sales_year_month_2 <- create_ymd_function(net_sales_year_month)
 
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 ## Generalizing Functions
 
+Here's another example of moving from specific to *general* functions.
+
+With the `create_line_chart` function, i'm taking in a dataframe, piping into `ggplot` and visualizing a simple line graph with `geom_line`. You'll note it is specific because it requires the dataframe to have a column named `net_sales` in order to work.
+
+But what if I wanted to repeat this operation with `total_orders` or `total_sales` or some other metric? 
+
+Right below, I create a more *general* function, `create_line_chart_general` that takes in *any* dataset and two columns as the function parameter. 
+
+This makes the function much more re-usable. However, it also introduces some `R`-specific commands like `enquo()` and `!!` to *quote* and *unquote* parameters for use in the function. We are entering `lazy evaluation` territory, which I'll save for another post!
+
 ```{r}
 
-# Step 1: 
+# BEFORE: 
 
 # This function only works for net_sales
 # It's easy to just slip 'data' as an argument
@@ -73,7 +106,9 @@ create_line_chart <- function(data){
     geom_line()   
 }
 
-# Step 2: This is a more generalizable function using enquo() and '!!'
+# AFTER: 
+
+# This is a more generalizable function using enquo() and '!!'
 # note columns as function parameters
 
 create_line_chart_general <- function(dataset, col_name_1, col_name_2){
@@ -91,6 +126,8 @@ create_line_chart_general(net_sales_year_month_2, month_year, net_sales)
 ```
 
 ## More Generalized Function
+
+This next function is slightly more complicated as it involves creating several more columns. But it can still be generalized using the tools discussed above. 
 
 ```{r}
 
@@ -121,6 +158,10 @@ net_sales_bpc_data <- create_bpc_columns_general(net_sales_year_month_2, net_sal
 ```
 
 ## Generalized Functions for Visualization
+
+This was the trickiest to convert into a general function and I'm still on the fence as to whether this is generalizable. In one sense, it *is* generalizable as I tested this `create_bpc_visualization_general` function on another column aside from `net_sales`, but it did require that I *know* that other columns in the dataset are: `avg_orders`, `unpl`, `lnpl`, `upper_25` and `lower_25`. 
+
+I have more exploring to do around quoting and unquoting `enquo()`, `quos()` for various `ggplot` geometries like `geom_hline`. Will report back with another post once I get those details down.
 
 ```{r}
 
@@ -167,4 +208,10 @@ create_bpc_visualization_general(net_sales_bpc_data, month_year, net_sales, avg_
 
 ```
 
+## Summary
 
+It's possible to do a fair amount of data analysis without using functions, but **functions** help you avoid endless copying and pasting and make your code less error prone. 
+
+There are many different types functions you could use. In this post, I share functions that take columns of data as arguments. These types of functions are well-suited for streamlining your data pre-processing and visualization tasks.
+
+Shout out to [Bruno Rodrigues](https://twitter.com/brodriguesco) for writing [**Modern R with the Tidyverse**](https://b-rodrigues.github.io/modern_R/) which has helped me get my head around writing custom functions. 
