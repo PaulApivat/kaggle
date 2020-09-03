@@ -1,0 +1,78 @@
+---
+title: "python_in_r"
+author: "Paul Apivat Hanvongse"
+date: "9/2/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r, include=FALSE}
+install.packages('reticulate')
+library(reticulate)
+use_python("/Users/paulapivat/.virtualenvs/py3-virtualenv/bin/python3")
+library(tidyverse)
+install.packages('nycflights13')
+library(nycflights13)
+
+
+use_virtualenv("py3-virtualenv")
+py_install("pandas", envname = "py3-virtualenv")
+```
+
+## Create flights.csv
+
+```{r,include=FALSE}
+flights
+
+# Write flights.csv to current directory
+write_csv(flights, path = "flights.csv")
+
+?write_csv
+
+```
+
+## Python
+
+```{python}
+import pandas
+flights = pandas.read_csv("flights.csv")
+flights = flights[flights['dest'] == 'ORD']
+flights = flights[['carrier', 'dep_delay', 'arr_delay']]
+flights = flights.dropna()
+print(flights.head())
+```
+
+Now, grab the `python` object from above and plot in `ggplot`.
+
+```{r,include=FALSE}
+ggplot(py$flights, aes(x = carrier, y = arr_delay)) +
+    geom_point() +
+    geom_jitter()
+```
+
+
+## Matplotlib
+
+```{python}
+import matplotlib.pyplot as plt
+import numpy as np
+t = np.arrange(0.0, 2.0, 0.01)
+s = 1 + np.sin(2*np.pi*t)
+plt.plot(t, s)
+plt.xlabel('time (s)')
+plt.ylabel('voltage (mV)')
+plt.grid(True)
+plt.savefig("test.png")
+plt.show()
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
