@@ -30,6 +30,7 @@ library(nycflights13)
 use_virtualenv("py3-virtualenv")
 py_install("pandas", envname = "py3-virtualenv")
 use_python("/Users/paulapivat/.virtualenvs/py3-virtualenv/bin/python3")
+#use_python("/usr/bin/python3")
 ```
 
 ## Create flights.csv
