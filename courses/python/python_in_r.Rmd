@@ -6,7 +6,9 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+#knitr::opts_chunk$set(echo = TRUE)
+
+knitr::knit_engines$set(python = reticulate::eng_python)
 ```
 
 ## R Markdown
@@ -18,14 +20,16 @@ When you click the **Knit** button a document will be generated that includes bo
 ```{r, include=FALSE}
 install.packages('reticulate')
 library(reticulate)
-use_python("/Users/paulapivat/.virtualenvs/py3-virtualenv/bin/python3")
+
 library(tidyverse)
 install.packages('nycflights13')
 library(nycflights13)
 
 
+
 use_virtualenv("py3-virtualenv")
 py_install("pandas", envname = "py3-virtualenv")
+use_python("/Users/paulapivat/.virtualenvs/py3-virtualenv/bin/python3")
 ```
 
 ## Create flights.csv
@@ -63,6 +67,7 @@ ggplot(py$flights, aes(x = carrier, y = arr_delay)) +
 ## Matplotlib
 
 ```{python}
+
 import matplotlib.pyplot as plt
 import numpy as np
 t = np.arrange(0.0, 2.0, 0.01)
