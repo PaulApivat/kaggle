@@ -2,415 +2,13 @@
  "cells": [
   {
    "cell_type": "code",
-   "execution_count": 1,
-   "metadata": {
-    "scrolled": true
-   },
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "5\n"
-     ]
-    }
-   ],
-   "source": [
-    "x = 3 + 2\n",
-    "print(x)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 3,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "   carrier  dep_delay  arr_delay\n",
-      "5       UA       -4.0       12.0\n",
-      "9       AA       -2.0        8.0\n",
-      "25      MQ        8.0       32.0\n",
-      "38      AA       -1.0       14.0\n",
-      "57      AA       -4.0        4.0\n"
-     ]
-    }
-   ],
-   "source": [
-    "import pandas\n",
-    "flights = pandas.read_csv(\"flights.csv\")\n",
-    "flights = flights[flights['dest'] == 'ORD']\n",
-    "flights = flights[['carrier', 'dep_delay', 'arr_delay']]\n",
-    "flights = flights.dropna()\n",
-    "print(flights.head())"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 4,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "   carrier  dep_delay  arr_delay\n",
-      "5       UA       -4.0       12.0\n",
-      "9       AA       -2.0        8.0\n",
-      "25      MQ        8.0       32.0\n",
-      "38      AA       -1.0       14.0\n",
-      "57      AA       -4.0        4.0\n"
-     ]
-    }
-   ],
-   "source": [
-    "print(flights.head())"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 5,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "True\n",
-      "<class 'bool'>\n"
-     ]
-    }
-   ],
-   "source": [
-    "x = True\n",
-    "print(x)\n",
-    "print(type(x))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 6,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Can a 19-year-old run for president? False\n",
-      "Can a 45-year-old run for president? True\n"
-     ]
-    }
-   ],
-   "source": [
-    "def can_run_for_president(age):\n",
-    "    \"\"\"Can someone of the given age run for president in the US?\"\"\"\n",
-    "    \"\"\"Returns a boolean\"\"\"\n",
-    "    return age >= 35\n",
-    "\n",
-    "print(\"Can a 19-year-old run for president?\", can_run_for_president(19))\n",
-    "print(\"Can a 45-year-old run for president?\", can_run_for_president(45))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 7,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "True"
-      ]
-     },
-     "execution_count": 7,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
-    "3.0 == 3"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 8,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Is 100 odd? False\n",
-      "Is -1 odd? True\n"
-     ]
-    }
-   ],
-   "source": [
-    "def is_odd(n):\n",
-    "    return (n % 2) == 1\n",
-    "\n",
-    "print(\"Is 100 odd?\", is_odd(100))\n",
-    "print(\"Is -1 odd?\", is_odd(-1))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 9,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "False\n",
-      "False\n",
-      "True\n"
-     ]
-    }
-   ],
-   "source": [
-    "# Combining Boolean Values\n",
-    "\n",
-    "def can_run_for_president(age, is_natural_born_citizen):\n",
-    "    \"\"\"Can someone of the given age and citizenship status run for president in the US?\"\"\"\n",
-    "    return is_natural_born_citizen and (age >= 35)\n",
-    "\n",
-    "print(can_run_for_president(19, True))\n",
-    "print(can_run_for_president(55, False))\n",
-    "print(can_run_for_president(55, True))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 13,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "0 is zero\n",
-      "-15 is negative\n"
-     ]
-    }
-   ],
-   "source": [
-    "def inspect(x):\n",
-    "    if x == 0:\n",
-    "        print(x, \"is zero\")\n",
-    "    elif x > 0:\n",
-    "        print(x, \"is positive\")\n",
-    "    elif x < 0:\n",
-    "        print(x, \"is negative\")\n",
-    "    else:\n",
-    "        print(x, \"is unlike anything I've ever seen...\")\n",
-    "        \n",
-    "inspect(0)\n",
-    "inspect(-15)\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 16,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Only printed when x is positive; x = 1\n",
-      "Also only printed when x is positive; x = 1\n",
-      "Always printed, regardless of x's value; x = 1\n",
-      "Always printed, regardless of x's value; x = 0\n"
-     ]
-    }
-   ],
-   "source": [
-    "def f(x):\n",
-    "    if x > 0:\n",
-    "        print(\"Only printed when x is positive; x =\", x)\n",
-    "        print(\"Also only printed when x is positive; x =\", x)\n",
-    "    print(\"Always printed, regardless of x's value; x =\", x)\n",
-    "\n",
-    "f(1)\n",
-    "f(0)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 18,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "True\n",
-      "False\n",
-      "True\n",
-      "False\n"
-     ]
-    }
-   ],
-   "source": [
-    "print(bool(1))\n",
-    "print(bool(0)) # zero returns false\n",
-    "print(bool(\"asf\"))\n",
-    "print(bool(\"\")) # empty string returns false"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 19,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "spam\n"
-     ]
-    }
-   ],
-   "source": [
-    "if 0:\n",
-    "    print(0)\n",
-    "elif \"spam\":\n",
-    "    print(\"spam\")"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 2,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Splitting 91 candies\n",
-      "Splitting 1 candy\n"
-     ]
-    },
-    {
-     "data": {
-      "text/plain": [
-       "1"
-      ]
-     },
-     "execution_count": 2,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
-    "def to_smash(total_candies):\n",
-    "    \"\"\"Return the number of leftover candies that must be smashed after distributing\n",
-    "    the given number of candies evenly between 3 friends.\n",
-    "    \n",
-    "    >>> to_smash(91)\n",
-    "    1\n",
-    "    \"\"\"\n",
-    "    if total_candies > 1:\n",
-    "        print(\"Splitting\", total_candies, \"candies\")\n",
-    "    elif total_candies == 1:\n",
-    "        print(\"Splitting\", total_candies, \"candy\")\n",
-    "    return total_candies % 3\n",
-    "\n",
-    "to_smash(91)\n",
-    "to_smash(1)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 5,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Splitting 91 candies\n",
-      "Splitting 1 candy\n"
-     ]
-    }
-   ],
-   "source": [
-    "def to_smash(total_candies):\n",
-    "    if total_candies == 1:\n",
-    "        print(\"Splitting 1 candy\")\n",
-    "    else:\n",
-    "        print(\"Splitting\", total_candies, \"candies\")\n",
-    "    \n",
-    "    \n",
-    "to_smash(91)\n",
-    "to_smash(1)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 6,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Splitting 91 candies\n",
-      "Splitting 1 candy\n"
-     ]
-    }
-   ],
-   "source": [
-    "def to_smash(total_candies):\n",
-    "    print(\"Splitting\", total_candies, \"candy\" if total_candies == 1 else \"candies\")\n",
-    "    \n",
-    "to_smash(91)\n",
-    "to_smash(1)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 2,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "False"
-      ]
-     },
-     "execution_count": 2,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
-    "def concise_is_negative(number):\n",
-    "    \"\"\"concise, but readable\"\"\"\n",
-    "    return True if number < 0 else False\n",
-    "\n",
-    "concise_is_negative(5)"
-   ]
-  },
-  {
-   "cell_type": "code",
    "execution_count": 4,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "True"
+       "'Saturn'"
       ]
      },
      "execution_count": 4,
@@ -419,210 +17,360 @@
     }
    ],
    "source": [
-    "def more_concise_is_negative(number):\n",
-    "    \"\"\"concise, but not readable\"\"\"\n",
-    "    return number < 0\n",
+    "planets = ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']\n",
     "\n",
-    "more_concise_is_negative(-4)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 5,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "True"
-      ]
-     },
-     "execution_count": 5,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
-    "def verbose_is_negative(number):\n",
-    "    if number < 0:\n",
-    "        return True\n",
-    "    else:\n",
-    "        return False\n",
-    "    \n",
-    "verbose_is_negative(-4)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 19,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "'onion'"
-      ]
-     },
-     "execution_count": 19,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
-    "def wants_all_toppings(ketchup, mustard, onion):\n",
-    "    \"\"\"Return whether the customer wants 'the works' (all 3 toppings)\n",
-    "    \"\"\"\n",
-    "    return (ketchup and mustard and onion)\n",
+    "# mercury\n",
+    "planets[0]\n",
     "\n",
-    "wants_all_toppings('ketchup', 'mustard', 'onion')"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 16,
-   "metadata": {
-    "scrolled": true
-   },
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "False"
-      ]
-     },
-     "execution_count": 16,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
-    "def wants_plain_hotdog(ketchup, mustard, onion):\n",
-    "    \"\"\"Return whether the customer wants a plain hot dog with no toppings.\n",
-    "    \"\"\"\n",
-    "    return not (ketchup or mustard or onion)\n",
+    "# venus\n",
+    "planets[1]\n",
     "\n",
-    "wants_plain_hotdog('ketchup', 'mustard', 'onion')"
+    "#neptune\n",
+    "planets[-1]\n",
+    "\n",
+    "#saturn\n",
+    "planets[-3]"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 11,
+   "execution_count": 15,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "8"
+       "['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']"
       ]
      },
-     "execution_count": 11,
+     "execution_count": 15,
      "metadata": {},
      "output_type": "execute_result"
     }
    ],
    "source": [
-    "3 + 5"
+    "# SLICING\n",
+    "\n",
+    "planets = ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']\n",
+    "\n",
+    "planets[0:4]\n",
+    "\n",
+    "planets[4:]\n",
+    "\n",
+    "planets[:4]\n",
+    "\n",
+    "# all planets except first and last\n",
+    "planets[1:-1]\n",
+    "\n",
+    "# last four planets\n",
+    "planets[-4:]\n",
+    "\n",
+    "planets"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 28,
+   "execution_count": 23,
    "metadata": {},
    "outputs": [
     {
-     "ename": "TypeError",
-     "evalue": "unsupported operand type(s) for ^: 'str' and 'str'",
-     "output_type": "error",
-     "traceback": [
-      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
-      "\u001b[0;31mTypeError\u001b[0m                                 Traceback (most recent call last)",
-      "\u001b[0;32m<ipython-input-28-072822fcbcbf>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m      5\u001b[0m     \u001b[0;32mreturn\u001b[0m \u001b[0mketchup\u001b[0m \u001b[0;34m^\u001b[0m \u001b[0mmustard\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      6\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 7\u001b[0;31m \u001b[0mexactly_one_sauce\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'ketchup'\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m'mustard'\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m'onion'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
-      "\u001b[0;32m<ipython-input-28-072822fcbcbf>\u001b[0m in \u001b[0;36mexactly_one_sauce\u001b[0;34m(ketchup, mustard, onion)\u001b[0m\n\u001b[1;32m      3\u001b[0m     \u001b[0;34m(\u001b[0m\u001b[0mYou\u001b[0m \u001b[0mmay\u001b[0m \u001b[0mbe\u001b[0m \u001b[0mfamiliar\u001b[0m \u001b[0;32mwith\u001b[0m \u001b[0mthis\u001b[0m \u001b[0moperation\u001b[0m \u001b[0munder\u001b[0m \u001b[0mthe\u001b[0m \u001b[0mname\u001b[0m \u001b[0;34m\"exclusive or\"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      4\u001b[0m     \"\"\"\n\u001b[0;32m----> 5\u001b[0;31m     \u001b[0;32mreturn\u001b[0m \u001b[0mketchup\u001b[0m \u001b[0;34m^\u001b[0m \u001b[0mmustard\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      6\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      7\u001b[0m \u001b[0mexactly_one_sauce\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'ketchup'\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m'mustard'\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m'onion'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;31mTypeError\u001b[0m: unsupported operand type(s) for ^: 'str' and 'str'"
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['Mur', 'Vee', 'Ur', 'Malacandra', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']\n",
+      "['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']\n"
      ]
     }
    ],
    "source": [
-    "def exactly_one_sauce(ketchup, mustard, onion):\n",
-    "    \"\"\"Return whether the customer wants either ketchup or mustard, but not both.\n",
-    "    (You may be familiar with this operation under the name \"exclusive or\")\n",
-    "    \"\"\"\n",
-    "    return ketchup ^ mustard\n",
+    "# CHANGING LISTS\n",
     "\n",
-    "exactly_one_sauce('ketchup','mustard','onion')"
+    "planets = ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']\n",
+    "\n",
+    "#change fourth planet\n",
+    "planets[3] = 'Malacandra'\n",
+    "\n",
+    "planets\n",
+    "\n",
+    "# shorten names of the first 3 planets\n",
+    "planets[:3] = ['Mur', 'Vee', 'Ur']\n",
+    "\n",
+    "print(planets)\n",
+    "\n",
+    "# give back their old names\n",
+    "planets[:4] = ['Mercury', 'Venus', 'Earth', 'Mars']\n",
+    "\n",
+    "print(planets)"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 27,
+   "execution_count": 30,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "False"
+       "7"
       ]
      },
-     "execution_count": 27,
+     "execution_count": 30,
      "metadata": {},
      "output_type": "execute_result"
     }
    ],
    "source": [
-    "def exactly_one_sauce(ketchup, mustard, onion):\n",
-    "    \"\"\"Return whether the customer wants either ketchup or mustard, but not both.\n",
-    "    (You may be familiar with this operation under the name \"exclusive or\")\n",
-    "    \"\"\"\n",
-    "    return (ketchup and not mustard) or (mustard and not ketchup)\n",
+    "# LIST FUNCTIONS\n",
     "\n",
-    "exactly_one_sauce('ketchup', 'mustard', 'onion')"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 31,
-   "metadata": {},
-   "outputs": [
-    {
-     "ename": "NameError",
-     "evalue": "name 'ketchup' is not defined",
-     "output_type": "error",
-     "traceback": [
-      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
-      "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
-      "\u001b[0;32m<ipython-input-31-1f2120bca48e>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m      5\u001b[0m     \u001b[0;32mreturn\u001b[0m \u001b[0;34m(\u001b[0m\u001b[0mint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mketchup\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m+\u001b[0m \u001b[0mint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mmustard\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m+\u001b[0m \u001b[0mint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0monion\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0;36m1\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      6\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 7\u001b[0;31m \u001b[0mexactly_one_topping\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mketchup\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mmustard\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0monion\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
-      "\u001b[0;31mNameError\u001b[0m: name 'ketchup' is not defined"
-     ]
-    }
-   ],
-   "source": [
-    "def exactly_one_topping(ketchup, mustard, onion):\n",
-    "    \"\"\"Return whether the customer wants exactly one of the three available toppings\n",
-    "    on their hot dog.\n",
-    "    \"\"\"\n",
-    "    return (int(ketchup) + int(mustard) + int(onion)) == 1\n",
+    "#length of list\n",
+    "len(planets)\n",
+    "\n",
+    "# sort strings in alphabetical order\n",
+    "sorted(planets)\n",
+    "\n",
+    "primes = [2, 3, 5, 7]\n",
+    "\n",
+    "# sum only works with integers\n",
+    "# sum all numbers in the list\n",
+    "sum(primes)\n",
+    "\n",
+    "# find max number\n",
+    "max(primes)\n",
     "\n"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 115,
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0\n",
+      "3.0\n",
+      "459\n",
+      "0\n",
+      "4.0\n",
+      "Help on built-in function bit_length:\n",
+      "\n",
+      "bit_length() method of builtins.int instance\n",
+      "    Number of bits necessary to represent self in binary.\n",
+      "    \n",
+      "    >>> bin(37)\n",
+      "    '0b100101'\n",
+      "    >>> (37).bit_length()\n",
+      "    6\n",
+      "\n"
+     ]
+    }
+   ],
    "source": [
-    "def should_hit(dealer_total, player_total, player_low_aces, player_high_aces):\n",
-    "    \"\"\"Return True if the player should hit (request another card) given the current game\n",
-    "    state, or False if the player should stay.\n",
-    "    When calculating a hand's total value, we count aces as \"high\" (with value 11) if doing so\n",
-    "    doesn't bring the total above 21, otherwise we count them as low (with value 1). \n",
-    "    For example, if the player's hand is {A, A, A, 7}, we will count it as 11 + 1 + 1 + 7,\n",
-    "    and therefore set player_total=20, player_low_aces=2, player_high_aces=1.\n",
-    "    \"\"\"\n",
-    "    if player_total < 21:\n",
-    "        player_high_aces==11\n",
-    "    else:\n",
-    "        player_high_aces==1\n",
-    "    return False"
+    "# OBJECTS\n",
+    "\n",
+    "x = 12\n",
+    "# x is a real number, so its imaginary part is 0.\n",
+    "print(x.imag)\n",
+    "# Here's how to make a complex number, in case you've ever been curious:\n",
+    "c = 12 + 3j\n",
+    "print(c.imag)\n",
+    "\n",
+    "y = 459\n",
+    "print(y)\n",
+    "print(y.imag)\n",
+    "\n",
+    "# how to make a complex number\n",
+    "z = 459 + 4j\n",
+    "print(z.imag)\n",
+    "\n",
+    "y.bit_length()\n",
+    "\n",
+    "help(y.bit_length)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 93,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']\n",
+      "['Earth', 'Jupiter', 'Mars', 'Mercury', 'Neptune', 'Saturn', 'Uranus', 'Venus']\n",
+      "['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']\n",
+      "['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus']\n"
+     ]
+    }
+   ],
+   "source": [
+    "# LIST METHODS\n",
+    "planets = ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']\n",
+    "print(planets)\n",
+    "\n",
+    "#planets\n",
+    "#sorted(planets)\n",
+    "print(sorted(planets))\n",
+    "\n",
+    "\n",
+    "\n",
+    "# add string to end of a list\n",
+    "# planets.append('Pluto')\n",
+    "planets.append('Pluto')\n",
+    "planets\n",
+    "\n",
+    "#planets.append('Pluto')\n",
+    "\n",
+    "# remove last five 'Pluto' in the list\n",
+    "#del planets[-5:]\n",
+    "\n",
+    "del planets[-1]\n",
+    "print(planets)\n",
+    "\n",
+    "del planets[-1]\n",
+    "print(planets)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 95,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'Uranus'"
+      ]
+     },
+     "execution_count": 95,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "planets\n",
+    "\n",
+    "# remove and return last element of a list\n",
+    "planets.pop()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 104,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "False"
+      ]
+     },
+     "execution_count": 104,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# SEARCHING LISTS\n",
+    "\n",
+    "planets.index('Earth')\n",
+    "\n",
+    "#ERROR: planets.index('Uranus')\n",
+    "\n",
+    "\n",
+    "# ask whether Pluto is in planets\n",
+    "'Pluto' in planets\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 108,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "TypeError",
+     "evalue": "'tuple' object does not support item assignment",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mTypeError\u001b[0m                                 Traceback (most recent call last)",
+      "\u001b[0;32m<ipython-input-108-f458a0287d85>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m      6\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      7\u001b[0m \u001b[0;31m# TUPLES are immutable\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 8\u001b[0;31m \u001b[0mt\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;36m0\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;36m100\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+      "\u001b[0;31mTypeError\u001b[0m: 'tuple' object does not support item assignment"
+     ]
+    }
+   ],
+   "source": [
+    "# TUPLES\n",
+    "\n",
+    "t = (1,2,3)\n",
+    "\n",
+    "t\n",
+    "\n",
+    "# TUPLES are immutable\n",
+    "t[0] = 100\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 120,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0.125\n",
+      "(1, 8)\n",
+      "1\n",
+      "8\n",
+      "0.125\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Tuples are used when there are multiple return values\n",
+    "\n",
+    "x = 0.125\n",
+    "print(x)\n",
+    "\n",
+    "y = x.as_integer_ratio()\n",
+    "print(y)\n",
+    "\n",
+    "# individually assign return values\n",
+    "numerator, denominator = x.as_integer_ratio()\n",
+    "print(numerator)\n",
+    "print(denominator)\n",
+    "print(numerator / denominator)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 127,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0\n",
+      "1\n",
+      "0 1\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Classic Python Trick for Swapping Two variables\n",
+    "\n",
+    "a = 1\n",
+    "b = 0\n",
+    "a, b = b, a\n",
+    "print(a)\n",
+    "print(b)\n",
+    "print(a,b)"
    ]
   }
  ],
