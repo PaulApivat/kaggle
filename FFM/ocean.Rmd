@@ -44,6 +44,8 @@ names(data) <- data[1,]
 # Step 2: delete first row
 data <- data[-1,]
 
+
+# NEXT STEP: Add ID column
 ```
 
 ## Quick Viz
@@ -77,4 +79,7 @@ data %>%
     geom_col() +
     scale_x_continuous(seq(1,5))
 
+
 ```
+
+NEXT STEP: Add ID column
