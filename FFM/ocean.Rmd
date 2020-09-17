@@ -46,4 +46,35 @@ data <- data[-1,]
 
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Quick Viz
+
+Visualizing two survey ITEMS. 
+
+```{r, include=FALSE}
+
+# Uninformative scatter plot
+data %>%
+    select(EXT1, EXT2) %>%
+    mutate(
+        EXT1 = as.numeric(EXT1),
+        EXT2 = as.numeric(EXT2)
+    ) %>%
+    ggplot(aes(x = EXT1, y = EXT2)) +
+    geom_point()
+
+
+# Quick Group and Tally
+# Visualizing a SINGLE survey item using Bar plot
+data %>%
+    select(EXT1, EXT2) %>%
+    mutate(
+        EXT1 = as.numeric(EXT1),
+        EXT2 = as.numeric(EXT2)
+    ) %>%
+    group_by(EXT1) %>%
+    tally(sort = TRUE) %>%
+    ggplot(aes(x = EXT1, y = n)) +
+    geom_col() +
+    scale_x_continuous(seq(1,5))
+
+```
