@@ -1,0 +1,49 @@
+---
+title: "FFM"
+author: "Paul Apivat Hanvongse"
+date: "9/17/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Setup
+
+Setup
+
+```{r, include=FALSE}
+#R version 4.0.2 (2020-06-22)
+#Platform: x86_64-apple-darwin17.0 (64-bit)
+#Running under: macOS Catalina 10.15.6
+sessionInfo()
+
+# library
+library(tidyverse)
+```
+
+## Load & Clean Data
+
+Sometimes a CSV file will have all columns bunched together and we want to load the file while having all columns separated. We'll need to use `read.csv` instead of `readr` or `read_csv`.
+
+See this stack overflow for more [details](https://stackoverflow.com/questions/27585857/reading-a-file-in-r-columns-are-separated-with-multiple-space).
+
+```{r, include=FALSE}
+# note: setwd() to Desktop
+# note: read.csv(header = FALSE) to get rid of 'duplicate row names error', fix later
+
+data <- read.csv("./RData/IPIP-FFM-data-8Nov2018/data-final.csv", header = FALSE, strip.white = T, sep = '')
+glimpse(data)
+
+# Turn first row into column name
+
+# Step 1: copy 1st row to header
+names(data) <- data[1,]
+
+# Step 2: delete first row
+data <- data[-1,]
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
